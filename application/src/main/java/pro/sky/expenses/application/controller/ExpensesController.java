@@ -20,24 +20,15 @@ public class ExpensesController {
     private final ExpenseService expenseService;
 
     @GetMapping
-    public ResponseEntity<List<Expense>> getAllExpenses() {
-        List<Expense> expenses = expenseService.getAllExpenses();
+    public ResponseEntity<List<Expense>> getAllExpenses(@RequestParam("page") Integer pageNumber, @RequestParam("size") Integer pageSize) {
+        List<Expense> expenses = expenseService.getAllExpenses(pageNumber, pageSize);
         return ResponseEntity.ok(expenses);
     }
 
     @PostMapping
     public ResponseEntity<?> createExpense(@RequestBody Expense expense) {
-        try {
-            if (expense == null) {
-                return ResponseEntity.badRequest().body("Expense cannot be null");
-            }
-
-            expenseService.createExpense(expense);
-            return ResponseEntity.ok("Expense created successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error: " + e.getMessage());
-        }
+        expenseService.createExpense(expense);
+        return ResponseEntity.ok(null);
     }
 
 
